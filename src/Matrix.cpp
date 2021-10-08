@@ -2,11 +2,18 @@
 #include <vector>
 #include "Matrix.h"
 
+Matrix::Matrix(size_t rows, size_t cols) {
+	rows_ = rows;
+	cols_ = cols;
+
+	m_.resize(rows, std::vector<double>(cols, 0.0));
+}
+
 Matrix::Matrix(size_t rows, size_t cols, std::vector<double> m) {
 	rows_ = rows;
 	cols_ = cols;
 
-	m_.resize(rows, std::vector<double>(cols, 0));
+	m_.resize(rows, std::vector<double>(cols, 0.0));
 
 	for (size_t i = 0; i < rows; i++) {
 		for (size_t j = 0; j < cols; j++) {
