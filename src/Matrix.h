@@ -8,7 +8,7 @@ class Matrix {
 	public:
 		Matrix(size_t rows, size_t cols, std::vector<double> m);
 
-		double operator()(size_t row, size_t col);
+		double& operator()(size_t row, size_t col);
 
 		//Matrix operator*(Matrix n);
 

@@ -15,6 +15,7 @@ Matrix::Matrix(size_t rows, size_t cols, std::vector<double> m) {
 	}
 }
 
-double Matrix::operator()(size_t row, size_t col) {
+// TODO: add boundary check
+double& Matrix::operator()(size_t row, size_t col) {
    return m_[row][col];
 }
