@@ -12,7 +12,7 @@ class Matrix {
 
 		double& operator()(size_t row, size_t col);
 
-		//Matrix operator*(Matrix n);
+		Matrix operator*(Matrix n);
 
 		//Vertex operator*(Vertex v);
 
