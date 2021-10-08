@@ -3,12 +3,12 @@
 #include "Matrix.h"
 
 int main() {
-	Vertex a = Vertex(1.0, 2.0, 3.0, 4.0);
-	Vertex b = Vertex(3.0, 6.0, 9.0, 12.0);
+	Matrix a = Matrix(2, 2, std::vector<double> {1.2, 2.5, 3.7, 4.1});
+	Matrix b = Matrix(2, 2, std::vector<double> {1.2, 2.5, 3.7, 4.1});
+	Matrix c = a + b;
 
-	Matrix m = Matrix(2, 2, std::vector<double> {1.2, 2.5, 3.7, 4.1});
-
-	std::cout << m(1, 0) << std::endl;
+	std::cout << c(0, 0) << ' ' << c(0, 1) << std::endl;
+	std::cout << c(1, 0) << ' ' << c(1, 1) << std::endl;
 
 	return 0;
 }

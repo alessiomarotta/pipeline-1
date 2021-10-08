@@ -16,7 +16,9 @@ class Matrix {
 
 		//Vertex operator*(Vertex v);
 
-		//Matrix operator+(Matrix n);
+		Matrix operator+(Matrix n);
+
+		Matrix operator-(Matrix n);
 	
 	private:
 		size_t rows_;

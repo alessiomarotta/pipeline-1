@@ -40,3 +40,27 @@ Matrix Matrix::operator*(Matrix n) {
 
 	return res;
 }
+
+Matrix Matrix::operator+(Matrix n) {
+	Matrix res = Matrix(rows_, cols_);
+
+	for (size_t i = 0; i < rows_; i++) {
+		for (size_t j = 0; j < cols_; j++) {
+			res(i, j) = m_[i][j] + n(i, j);
+		}
+	}
+
+	return res;
+}
+
+Matrix Matrix::operator-(Matrix n) {
+	Matrix res = Matrix(rows_, cols_);
+
+	for (size_t i = 0; i < rows_; i++) {
+		for (size_t j = 0; j < cols_; j++) {
+			res(i, j) = m_[i][j] - n(i, j);
+		}
+	}
+
+	return res;
+}
