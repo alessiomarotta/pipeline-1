@@ -1,4 +1,4 @@
-#ifndef MATRIX_X
+#ifndef MATRIX_H
 #define MATRIX_H
 
 #include <cstddef>
