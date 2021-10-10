@@ -1,6 +1,6 @@
 #include <iostream>
-#include "Vertex.h"
 #include "Matrix.h"
+#include "Vertex.h"
 
 int main() {
 	Matrix a = Matrix(2, 2, std::vector<double> {1.2, 2.5, 3.7, 4.1});

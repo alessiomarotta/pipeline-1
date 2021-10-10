@@ -1,6 +1,7 @@
 #include <cstddef>
 #include <vector>
 #include "Matrix.h"
+#include "Vertex.h"
 
 Matrix::Matrix(size_t rows, size_t cols) {
 	rows_ = rows;
@@ -53,6 +54,14 @@ Matrix Matrix::operator*(double n) {
 	return res;
 }
 
+Vertex Matrix::operator*(Vertex v) {
+	double x = m_[0][0]*v.x + m_[0][1]*v.y + m_[0][2]*v.z + m_[0][3]*v.w;
+	double y = m_[1][0]*v.x + m_[1][1]*v.y + m_[1][2]*v.z + m_[1][3]*v.w;
+	double z = m_[2][0]*v.x + m_[2][1]*v.y + m_[2][2]*v.z + m_[2][3]*v.w;
+	double w = m_[3][0]*v.x + m_[3][1]*v.y + m_[3][2]*v.z + m_[3][3]*v.w;
+
+	return Vertex(x, y, z, w);
+}
 
 Matrix Matrix::operator+(Matrix n) {
 	Matrix res = Matrix(rows_, cols_);

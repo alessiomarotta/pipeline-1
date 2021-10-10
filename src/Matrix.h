@@ -3,6 +3,7 @@
 
 #include <cstddef>
 #include <vector>
+#include "Vertex.h"
 
 class Matrix {
 	public:
@@ -16,7 +17,7 @@ class Matrix {
 
 		Matrix operator*(double n);
 
-		//Vertex operator*(Vertex v);
+		Vertex operator*(Vertex v);
 
 		Matrix operator+(Matrix n);
 
