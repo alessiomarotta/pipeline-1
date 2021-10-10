@@ -14,6 +14,8 @@ class Matrix {
 
 		Matrix operator*(Matrix n);
 
+		Matrix operator*(double n);
+
 		//Vertex operator*(Vertex v);
 
 		Matrix operator+(Matrix n);
