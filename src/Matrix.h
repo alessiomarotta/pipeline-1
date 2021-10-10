@@ -7,6 +7,8 @@
 
 class Matrix {
 	public:
+		Matrix(std::vector<double> m) : Matrix(4, 4, m) {}
+
 		Matrix(size_t rows, size_t cols);
 
 		Matrix(size_t rows, size_t cols, std::vector<double> m);
