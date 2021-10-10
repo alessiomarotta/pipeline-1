@@ -5,6 +5,8 @@ class Vertex {
 	public:
 		double x, y, z, w;
 
+		Vertex() : Vertex(0.0, 0.0, 0.0, 0.0) {}
+
 		Vertex(double x, double y, double z, double w=1.0);
 		
 		Vertex operator+(Vertex r);
