@@ -9,6 +9,8 @@ class Triangle {
 		Vertex b;
 		Vertex c;
 
+		Triangle() : Triangle(Vertex(), Vertex(), Vertex()) {}
+
 		Triangle(Vertex a, Vertex b, Vertex c);
 };
 
