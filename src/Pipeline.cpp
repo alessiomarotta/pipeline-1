@@ -34,3 +34,24 @@ std::vector<Triangle> Pipeline::project(double top, double bottom, double left, 
 
 	return res;
 }
+
+
+std::vector<Triangle> Pipeline::removeTriangles() {
+	std::vector<Triangle> res;
+
+	for (Triangle t : triangles_) {
+		bool outOfBounds = t.a.x > 1.0 && t.b.x > 1.0 && t.c.x > 1.0;
+		outOfBounds |= t.a.y > 1.0 && t.b.y > 1.0 && t.c.y > 1.0;
+		outOfBounds |= t.a.z > 1.0 && t.b.z > 1.0 && t.c.z > 1.0;
+		outOfBounds |= t.a.x < -1.0 && t.b.x < -1.0 && t.c.x < -1.0;
+		outOfBounds |= t.a.y < -1.0 && t.b.y < -1.0 && t.c.y < -1.0;
+		outOfBounds |= t.a.z < -1.0 && t.b.z < -1.0 && t.c.z < -1.0;
+
+		if (outOfBounds)
+			continue;
+
+		res.push_back(t);
+	}
+
+	return res;
+}

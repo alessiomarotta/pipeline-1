@@ -8,6 +8,8 @@ class Pipeline {
 		Pipeline(std::vector<Triangle> triangles);
 
 		std::vector<Triangle> project(double top, double bottom, double left, double right, double near, double far);
+
+		std::vector<Triangle> removeTriangles();
 	
 	private:
 		std::vector<Triangle> triangles_;
