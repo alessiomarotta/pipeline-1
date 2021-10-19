@@ -1,4 +1,6 @@
+#include <algorithm>
 #include <vector>
+#include "Fragment.h"
 #include "Matrix.h"
 #include "Pipeline.h"
 #include "Triangle.h"
@@ -54,4 +56,57 @@ std::vector<Triangle> Pipeline::removeTriangles() {
 	}
 
 	return res;
+}
+
+bool edgeFunction(Vertex v1, Vertex v2, double x, double y) {
+	return ((x-v1.x) * (v2.y-v1.y) - (y-v1.y) * (v2.x-v1.x) >= 0);
+}
+
+bool insideTriangle(Triangle t, double x, double y) {
+	bool res = edgeFunction(t.b, t.a, x, y);
+	res &= edgeFunction(t.c, t.b, x, y);
+	res &= edgeFunction(t.a, t.c, x, y);
+
+	return res;
+}
+
+size_t toPixel(double coord, size_t factor) {
+	return (coord+1.0) * (factor-1) / 2.0;
+}
+
+double toCartesian(size_t coord, size_t factor) {
+	return (coord*2.0) / (factor-1) - 1;
+}
+
+double  calculateFragmentZ(Triangle t, double x, double y) {
+	double x_p = (t.b.y-t.a.y) * (t.c.z-t.a.z) - (t.c.y-t.a.y) * (t.b.z-t.a.z);
+	double y_p = (t.c.x-t.a.x) * (t.b.z-t.a.z) - (t.b.x-t.a.x) * (t.c.z-t.a.z);
+	double z_p = (t.b.x-t.a.x) * (t.c.y-t.a.y) - (t.b.y-t.a.y) * (t.c.x-t.a.x);
+	double w_p = (-x_p * (t.b.x-t.a.x) - y_p * (t.b.y-t.a.y) - z_p * (t.b.z-t.a.z));
+
+	Vertex p = Vertex(x_p, y_p, z_p, w_p);
+	return (-p.x * x - p.y * y - p.w) / p.z;
+}
+
+std::vector<Fragment> Pipeline::rasterize() {
+	std::vector<Fragment> fragments;
+
+	// TODO: add clamping to avoid rendering fragments outside the view
+	for (Triangle t : triangles_) {
+		double min_x = toPixel(std::min({t.a.x, t.b.x, t.c.x}), screen_width);
+		double min_y = toPixel(std::min({t.a.y, t.b.y, t.c.y}), screen_height);
+		double max_x = toPixel(std::max({t.a.x, t.b.x, t.c.x}), screen_width);
+		double max_y = toPixel(std::max({t.a.y, t.b.y, t.c.y}), screen_height);
+
+		for (size_t x = min_x; x <= max_x; x++) {
+			for (size_t y = min_y; y <= max_y; y++) {
+				if (insideTriangle(t, toCartesian(x, screen_width), toCartesian(y, screen_height))) {
+					double z = calculateFragmentZ(t, toCartesian(x, screen_width), toCartesian(y, screen_height));
+					fragments.push_back(Fragment(x, y, z));
+				}
+			}
+		}
+	}
+
+	return fragments;
 }
