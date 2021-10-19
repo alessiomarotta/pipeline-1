@@ -8,7 +8,11 @@ class Pipeline {
 	public:
 		Pipeline(std::vector<Triangle> triangles);
 
-		std::vector<Triangle> project(double top, double bottom, double left, double right, double near, double far);
+		void set_camera(double top, double bottom, double left, double right, double near, double far);
+
+		void set_target(void *target, size_t width, size_t height);
+
+		std::vector<Triangle> project();
 
 		std::vector<Triangle> removeTriangles();
 
@@ -16,8 +20,11 @@ class Pipeline {
 
 	private:
 		std::vector<Triangle> triangles_;
+		double top_, bottom_, left_, right_, near_, far_;
 
-		size_t screen_width, screen_height;
+		// TODO: use target_t instead of void * for screen
+		void *screen_;
+		size_t screen_width_, screen_height_;
 };
 
 #endif

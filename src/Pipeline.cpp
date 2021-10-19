@@ -9,17 +9,33 @@ Pipeline::Pipeline(std::vector<Triangle> triangles) {
 	triangles_ = triangles;
 }
 
-std::vector<Triangle> Pipeline::project(double top, double bottom, double left, double right, double near, double far) {
+void Pipeline::set_camera(double top, double bottom, double left, double right, double near, double far) {
+	top_ = top;
+	bottom_ = bottom;
+	left_ = left;
+	right_ = right;
+	near_ = near;
+	far_ = far;
+}
+
+void Pipeline::set_target(void *target, size_t width, size_t height) {
+	screen_ = target;
+	screen_width_ = width;
+	screen_height_ = height;
+}
+
+
+std::vector<Triangle> Pipeline::project() {
 	std::vector<Triangle> res;
 
 	Matrix proj = Matrix();
 
-	proj(0, 0) = 2.0*near / (right-left);
-	proj(0, 2) = (left+right) / (left-right);
-	proj(1, 1) = 2.0*near / (bottom-top);
-	proj(1, 2) = (top+bottom) / (top-bottom);
-	proj(2, 2) = (far+near) / (far-near);
-	proj(2, 3) = 2.0*near*far / (near-far);
+	proj(0, 0) = 2.0*near_ / (right_-left_);
+	proj(0, 2) = (left_+right_) / (left_-right_);
+	proj(1, 1) = 2.0*near_ / (bottom_-top_);
+	proj(1, 2) = (top_+bottom_) / (top_-bottom_);
+	proj(2, 2) = (far_+near_) / (far_-near_);
+	proj(2, 3) = 2.0*near_*far_ / (near_-far_);
 	proj(3, 2) = 1.0;
 
 	for (Triangle t : triangles_) {
@@ -93,15 +109,15 @@ std::vector<Fragment> Pipeline::rasterize() {
 
 	// TODO: add clamping to avoid rendering fragments outside the view
 	for (Triangle t : triangles_) {
-		double min_x = toPixel(std::min({t.a.x, t.b.x, t.c.x}), screen_width);
-		double min_y = toPixel(std::min({t.a.y, t.b.y, t.c.y}), screen_height);
-		double max_x = toPixel(std::max({t.a.x, t.b.x, t.c.x}), screen_width);
-		double max_y = toPixel(std::max({t.a.y, t.b.y, t.c.y}), screen_height);
+		double min_x = toPixel(std::min({t.a.x, t.b.x, t.c.x}), screen_width_);
+		double min_y = toPixel(std::min({t.a.y, t.b.y, t.c.y}), screen_height_);
+		double max_x = toPixel(std::max({t.a.x, t.b.x, t.c.x}), screen_width_);
+		double max_y = toPixel(std::max({t.a.y, t.b.y, t.c.y}), screen_height_);
 
 		for (size_t x = min_x; x <= max_x; x++) {
 			for (size_t y = min_y; y <= max_y; y++) {
-				if (insideTriangle(t, toCartesian(x, screen_width), toCartesian(y, screen_height))) {
-					double z = calculateFragmentZ(t, toCartesian(x, screen_width), toCartesian(y, screen_height));
+				if (insideTriangle(t, toCartesian(x, screen_width_), toCartesian(y, screen_height_))) {
+					double z = calculateFragmentZ(t, toCartesian(x, screen_width_), toCartesian(y, screen_height_));
 					fragments.push_back(Fragment(x, y, z));
 				}
 			}
