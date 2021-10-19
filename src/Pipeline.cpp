@@ -1,13 +1,10 @@
 #include <algorithm>
+#include <iostream>
 #include <vector>
 #include "Fragment.h"
 #include "Matrix.h"
 #include "Pipeline.h"
 #include "Triangle.h"
-
-Pipeline::Pipeline(std::vector<Triangle> triangles) {
-	triangles_ = triangles;
-}
 
 void Pipeline::set_camera(double top, double bottom, double left, double right, double near, double far) {
 	top_ = top;
@@ -18,12 +15,11 @@ void Pipeline::set_camera(double top, double bottom, double left, double right, 
 	far_ = far;
 }
 
-void Pipeline::set_target(void *target, size_t width, size_t height) {
+void Pipeline::set_target(char *target, size_t width, size_t height) {
 	screen_ = target;
 	screen_width_ = width;
 	screen_height_ = height;
 }
-
 
 std::vector<Triangle> Pipeline::project() {
 	std::vector<Triangle> res;
@@ -104,10 +100,11 @@ double  calculateFragmentZ(Triangle t, double x, double y) {
 	return (-p.x * x - p.y * y - p.w) / p.z;
 }
 
+// TODO: add zbuffering
 std::vector<Fragment> Pipeline::rasterize() {
 	std::vector<Fragment> fragments;
 
-	// TODO: add clamping to avoid rendering fragments outside the view
+	// TODO: drop fragments outside of the view
 	for (Triangle t : triangles_) {
 		double min_x = toPixel(std::min({t.a.x, t.b.x, t.c.x}), screen_width_);
 		double min_y = toPixel(std::min({t.a.y, t.b.y, t.c.y}), screen_height_);
@@ -125,4 +122,38 @@ std::vector<Fragment> Pipeline::rasterize() {
 	}
 
 	return fragments;
+}
+
+// TODO: make it use FragmentShader instead of the hardcoded shader
+void Pipeline::applyShader() {
+	for (Fragment f : fragments_) {
+		int digit = int((f.z + 1.0) * 10 / 2);
+		screen_[f.y * screen_width_ + f.x] = char(digit + '0');
+	}
+}
+
+void Pipeline::render(std::vector<Triangle> triangles) {
+	triangles_ = triangles;
+
+	triangles_ = project();
+	triangles_ = removeTriangles();
+	fragments_ = rasterize();
+
+	for (size_t x = 0; x < 150; x++) {
+		for (size_t y = 0; y < 50; y++)
+			screen_[y * screen_width_ + x] = '.';
+	}
+
+	applyShader();
+}
+
+void Pipeline::show() {
+	for (size_t y = 0; y < 50; y++) {
+		std::cout << std::endl;
+
+		for (size_t x = 0; x < 150; x++)
+			std::cout << screen_[y * screen_width_ + x];
+	}
+
+	std::cout << std::endl;
 }

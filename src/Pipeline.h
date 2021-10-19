@@ -6,11 +6,9 @@
 
 class Pipeline {
 	public:
-		Pipeline(std::vector<Triangle> triangles);
-
 		void set_camera(double top, double bottom, double left, double right, double near, double far);
 
-		void set_target(void *target, size_t width, size_t height);
+		void set_target(char *target, size_t width, size_t height);
 
 		std::vector<Triangle> project();
 
@@ -18,12 +16,20 @@ class Pipeline {
 
 		std::vector<Fragment> rasterize();
 
+		void applyShader();
+
+		void render(std::vector<Triangle> triangles);
+
+		// not really part of the class, to be used only for debug
+		void show();
+
 	private:
 		std::vector<Triangle> triangles_;
+		std::vector<Fragment> fragments_;
 		double top_, bottom_, left_, right_, near_, far_;
 
-		// TODO: use target_t instead of void * for screen
-		void *screen_;
+		// TODO: use target_t instead of char * for screen
+		char *screen_;
 		size_t screen_width_, screen_height_;
 };
 

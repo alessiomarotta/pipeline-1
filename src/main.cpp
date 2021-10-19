@@ -14,8 +14,13 @@ int main() {
 	Triangle t1 = Triangle(v1, v2, v3);
 	Triangle t2 = Triangle(v1, v3, v4);
 
-	Pipeline p = Pipeline({t1, t2});
+	char screen[150 * 50];
+
+	Pipeline p = Pipeline();
 	p.set_camera(-1, 1, -1, 1, 1, 2);
+	p.set_target(screen, 150, 50);
+	p.render({t1, t2});
+	p.show();
 
 	return 0;
 }
