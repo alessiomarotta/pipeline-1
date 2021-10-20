@@ -32,6 +32,7 @@ template<typename target_t>
 void Pipeline<target_t>::project() {
 	Matrix proj = Matrix();
 
+	// set perspective projection matrix
 	proj(0, 0) = 2.0*near_ / (right_-left_);
 	proj(0, 2) = (left_+right_) / (left_-right_);
 	proj(1, 1) = 2.0*near_ / (bottom_-top_);
@@ -45,6 +46,7 @@ void Pipeline<target_t>::project() {
 		Vertex b = proj * t.b;
 		Vertex c = proj * t.c;
 
+		// normalize coordinates
 		t.a = a / a.w;
 		t.b = b / b.w;
 		t.c = c / c.w;
@@ -91,6 +93,7 @@ double toCartesian(size_t coord, size_t factor) {
 }
 
 double calculateFragmentZ(Triangle t, double x, double y) {
+	// calculate the plane passing through t
 	double x_p = (t.b.y-t.a.y) * (t.c.z-t.a.z) - (t.c.y-t.a.y) * (t.b.z-t.a.z);
 	double y_p = (t.c.x-t.a.x) * (t.b.z-t.a.z) - (t.b.x-t.a.x) * (t.c.z-t.a.z);
 	double z_p = (t.b.x-t.a.x) * (t.c.y-t.a.y) - (t.b.y-t.a.y) * (t.c.x-t.a.x);
@@ -104,11 +107,13 @@ double calculateFragmentZ(Triangle t, double x, double y) {
 template<typename target_t>
 void Pipeline<target_t>::rasterize() {
 	for (Triangle &t : triangles_) {
+		// calculate bounding box size
 		size_t min_x = toPixel(std::min({t.a.x, t.b.x, t.c.x}), screen_width_);
 		size_t min_y = toPixel(std::min({t.a.y, t.b.y, t.c.y}), screen_height_);
 		size_t max_x = toPixel(std::max({t.a.x, t.b.x, t.c.x}), screen_width_);
 		size_t max_y = toPixel(std::max({t.a.y, t.b.y, t.c.y}), screen_height_);
 
+		// clamp bounding box to screen size
 		min_x = std::max(min_x, (size_t) 0);
 		min_y = std::max(min_y, (size_t) 0);
 		max_x = std::min(max_x, screen_width_-1);
