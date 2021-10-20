@@ -5,8 +5,8 @@
 
 template<typename target_t>
 class FragmentShader {
-	public:
-		target_t apply(Fragment &fragment);
+public:
+	target_t apply(Fragment &fragment);
 };
 
 template<>

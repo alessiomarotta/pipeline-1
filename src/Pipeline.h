@@ -7,31 +7,31 @@
 
 template<typename target_t>
 class Pipeline {
-	public:
-		void set_camera(double top, double bottom, double left, double right, double near, double far);
+public:
+	void set_camera(double top, double bottom, double left, double right, double near, double far);
 
-		void set_target(target_t *target, size_t width, size_t height);
+	void set_target(target_t *target, size_t width, size_t height);
 
-		void set_shader(FragmentShader<target_t> shader);
+	void set_shader(FragmentShader<target_t> shader);
 
-		void project();
+	void project();
 
-		void removeTriangles();
+	void removeTriangles();
 
-		void rasterize();
+	void rasterize();
 
-		void applyShader();
+	void applyShader();
 
-		void render(std::vector<Triangle> triangles);
+	void render(std::vector<Triangle> triangles);
 
-	private:
-		std::vector<Triangle> triangles_;
-		std::vector<Fragment> fragments_;
-		double top_, bottom_, left_, right_, near_, far_;
+private:
+	std::vector<Triangle> triangles_;
+	std::vector<Fragment> fragments_;
+	double top_, bottom_, left_, right_, near_, far_;
 
-		target_t *screen_;
-		size_t screen_width_, screen_height_;
-		FragmentShader<target_t> shader_;
+	target_t *screen_;
+	size_t screen_width_, screen_height_;
+	FragmentShader<target_t> shader_;
 };
 
 #endif
