@@ -64,6 +64,7 @@ bool outOfBounds(Triangle t) {
 	return res;
 }
 
+// remove out of bounds triangles
 template<typename target_t>
 void Pipeline<target_t>::removeTriangles() {
 	triangles_.erase(

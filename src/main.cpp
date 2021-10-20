@@ -30,20 +30,20 @@ void show(char *screen, size_t width, size_t height) {
 }
 
 int main() {
-	Vertex v1 = Vertex(1.0, -1.0, 1.5);
-	Vertex v2 = Vertex(1.0, 1.0, 1.1);
-	Vertex v3 = Vertex(-1.0, 1.0, 1.5);
-	Vertex v4 = Vertex(-1.0, -1.0, 1.9);
+	Vertex v1(1.0, -1.0, 1.5);
+	Vertex v2(1.0, 1.0, 1.1);
+	Vertex v3(-1.0, 1.0, 1.5);
+	Vertex v4(-1.0, -1.0, 1.9);
 
-	Triangle t1 = Triangle(v1, v2, v3);
-	Triangle t2 = Triangle(v1, v3, v4);
+	Triangle t1(v1, v2, v3);
+	Triangle t2(v1, v3, v4);
 	std::vector<Triangle> triangles = {t1, t2};
 
 	char screen[SCREEN_WIDTH * SCREEN_HEIGHT];
 	initializeScreen(screen, SCREEN_WIDTH, SCREEN_HEIGHT);
 	FragmentShader<char> shader;
 
-	Pipeline<char> p = Pipeline<char>();
+	Pipeline<char> p;
 	p.setCamera(-1, 1, -1, 1, 1, 2);
 	p.setTarget(screen, 150, 50);
 	p.setShader(shader);

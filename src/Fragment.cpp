@@ -1,7 +1,3 @@
 #include "Fragment.h"
 
-Fragment::Fragment(size_t x, size_t y, double z) {
-	this->x = x;
-	this->y = y;
-	this->z = z;
-}
+Fragment::Fragment(size_t x, size_t y, double z) : x(x), y(y), z(z) {}

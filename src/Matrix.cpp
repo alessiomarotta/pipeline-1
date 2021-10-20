@@ -23,7 +23,7 @@ double& Matrix::operator()(size_t row, size_t col) {
 }
 
 Matrix Matrix::operator*(Matrix &n) {
-	Matrix res = Matrix(rows_, cols_);
+	Matrix res(rows_, cols_);
 
 	for (size_t i = 0; i < rows_; i++) {
 		for (size_t j = 0; j < cols_; j++) {
@@ -37,7 +37,7 @@ Matrix Matrix::operator*(Matrix &n) {
 }
 
 Matrix Matrix::operator*(double n) {
-	Matrix res = Matrix(rows_, cols_);
+	Matrix res(rows_, cols_);
 
 	for (size_t i = 0; i < rows_; i++) {
 		for (size_t j = 0; j < cols_; j++) {
@@ -58,7 +58,7 @@ Vertex Matrix::operator*(Vertex v) {
 }
 
 Matrix Matrix::operator+(Matrix &n) {
-	Matrix res = Matrix(rows_, cols_);
+	Matrix res(rows_, cols_);
 
 	for (size_t i = 0; i < rows_; i++) {
 		for (size_t j = 0; j < cols_; j++) {
@@ -70,7 +70,7 @@ Matrix Matrix::operator+(Matrix &n) {
 }
 
 Matrix Matrix::operator-(Matrix &n) {
-	Matrix res = Matrix(rows_, cols_);
+	Matrix res(rows_, cols_);
 
 	for (size_t i = 0; i < rows_; i++) {
 		for (size_t j = 0; j < cols_; j++) {

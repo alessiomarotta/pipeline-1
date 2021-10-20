@@ -1,12 +1,7 @@
 #include <cmath>
 #include "Vertex.h"
 
-Vertex::Vertex(double x, double y, double z, double w) {
-	this->x = x;
-	this->y = y;
-	this->z = z;
-	this->w = w;
-}
+Vertex::Vertex(double x, double y, double z, double w) : x(x), y(y), z(z), w(w) {}
 
 Vertex Vertex::operator+(Vertex r) {
 	return Vertex(x + r.x, y + r.y, z + r.z, w + r.w);
