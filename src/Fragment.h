@@ -1,12 +1,14 @@
 #ifndef FRAGMENT_H
 #define FRAGMENT_H
 
+#include <cstddef>
+
 class Fragment {
 	public:
-		int x, y;
+		size_t x, y;
 		double z;
 
-		Fragment(int x, int y, double z);
+		Fragment(size_t x, size_t y, double z);
 };
 
 #endif
