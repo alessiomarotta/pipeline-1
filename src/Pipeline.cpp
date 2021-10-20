@@ -64,7 +64,7 @@ bool outOfBounds(Triangle t) {
 	return res;
 }
 
-// remove out of bounds triangles
+// remove triangles completely outside of the current view
 template<typename target_t>
 void Pipeline<target_t>::removeTriangles() {
 	triangles_.erase(
@@ -108,7 +108,7 @@ double calculateFragmentZ(Triangle t, double x, double y) {
 template<typename target_t>
 void Pipeline<target_t>::rasterize() {
 	for (Triangle &t : triangles_) {
-		// calculate bounding box size
+		// calculate bounding box coordinates
 		size_t min_x = toPixel(std::min({t.a.x, t.b.x, t.c.x}), screen_width_);
 		size_t min_y = toPixel(std::min({t.a.y, t.b.y, t.c.y}), screen_height_);
 		size_t max_x = toPixel(std::max({t.a.x, t.b.x, t.c.x}), screen_width_);
