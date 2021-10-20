@@ -10,12 +10,7 @@ Matrix::Matrix(size_t rows, size_t cols) {
 	m_.resize(rows, std::vector<double>(cols, 0.0));
 }
 
-Matrix::Matrix(size_t rows, size_t cols, std::vector<double> m) {
-	rows_ = rows;
-	cols_ = cols;
-
-	m_.resize(rows, std::vector<double>(cols, 0.0));
-
+Matrix::Matrix(size_t rows, size_t cols, std::vector<double> m) : Matrix(rows, cols) {
 	for (size_t i = 0; i < rows; i++) {
 		for (size_t j = 0; j < cols; j++) {
 			m_[i][j] = m[(i * cols) + j];
