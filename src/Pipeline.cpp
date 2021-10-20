@@ -6,7 +6,8 @@
 #include "Pipeline.h"
 #include "Triangle.h"
 
-void Pipeline::set_camera(double top, double bottom, double left, double right, double near, double far) {
+template<typename target_t>
+void Pipeline<target_t>::set_camera(double top, double bottom, double left, double right, double near, double far) {
 	top_ = top;
 	bottom_ = bottom;
 	left_ = left;
@@ -15,13 +16,15 @@ void Pipeline::set_camera(double top, double bottom, double left, double right, 
 	far_ = far;
 }
 
-void Pipeline::set_target(char *target, size_t width, size_t height) {
+template<typename target_t>
+void Pipeline<target_t>::set_target(target_t *target, size_t width, size_t height) {
 	screen_ = target;
 	screen_width_ = width;
 	screen_height_ = height;
 }
 
-std::vector<Triangle> Pipeline::project() {
+template<typename target_t>
+std::vector<Triangle> Pipeline<target_t>::project() {
 	std::vector<Triangle> res;
 
 	Matrix proj = Matrix();
@@ -49,8 +52,8 @@ std::vector<Triangle> Pipeline::project() {
 	return res;
 }
 
-
-std::vector<Triangle> Pipeline::removeTriangles() {
+template<typename target_t>
+std::vector<Triangle> Pipeline<target_t>::removeTriangles() {
 	std::vector<Triangle> res;
 
 	for (Triangle t : triangles_) {
@@ -101,7 +104,8 @@ double  calculateFragmentZ(Triangle t, double x, double y) {
 }
 
 // TODO: add zbuffering
-std::vector<Fragment> Pipeline::rasterize() {
+template<typename target_t>
+std::vector<Fragment> Pipeline<target_t>::rasterize() {
 	std::vector<Fragment> fragments;
 
 	// TODO: drop fragments outside of the view
@@ -125,14 +129,16 @@ std::vector<Fragment> Pipeline::rasterize() {
 }
 
 // TODO: make it use FragmentShader instead of the hardcoded shader
-void Pipeline::applyShader() {
+template<typename target_t>
+void Pipeline<target_t>::applyShader() {
 	for (Fragment f : fragments_) {
 		int digit = int((f.z + 1.0) * 10 / 2);
 		screen_[f.y * screen_width_ + f.x] = char(digit + '0');
 	}
 }
 
-void Pipeline::render(std::vector<Triangle> triangles) {
+template<typename target_t>
+void Pipeline<target_t>::render(std::vector<Triangle> triangles) {
 	triangles_ = triangles;
 
 	triangles_ = project();
@@ -147,7 +153,8 @@ void Pipeline::render(std::vector<Triangle> triangles) {
 	applyShader();
 }
 
-void Pipeline::show() {
+template<typename target_t>
+void Pipeline<target_t>::show() {
 	for (size_t y = 0; y < 50; y++) {
 		std::cout << std::endl;
 

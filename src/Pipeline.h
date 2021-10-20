@@ -4,11 +4,12 @@
 #include "Fragment.h"
 #include "Triangle.h"
 
+template<typename target_t>
 class Pipeline {
 	public:
 		void set_camera(double top, double bottom, double left, double right, double near, double far);
 
-		void set_target(char *target, size_t width, size_t height);
+		void set_target(target_t *target, size_t width, size_t height);
 
 		std::vector<Triangle> project();
 
@@ -28,8 +29,7 @@ class Pipeline {
 		std::vector<Fragment> fragments_;
 		double top_, bottom_, left_, right_, near_, far_;
 
-		// TODO: use target_t instead of char * for screen
-		char *screen_;
+		target_t *screen_;
 		size_t screen_width_, screen_height_;
 };
 
