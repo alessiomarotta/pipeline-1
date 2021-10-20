@@ -8,11 +8,11 @@
 template<typename target_t>
 class Pipeline {
 public:
-	void set_camera(double top, double bottom, double left, double right, double near, double far);
+	void setCamera(double top, double bottom, double left, double right, double near, double far);
 
-	void set_target(target_t *target, size_t width, size_t height);
+	void setTarget(target_t *target, size_t width, size_t height);
 
-	void set_shader(FragmentShader<target_t> &shader);
+	void setShader(FragmentShader<target_t> &shader);
 
 	void project();
 

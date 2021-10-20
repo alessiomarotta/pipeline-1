@@ -44,9 +44,9 @@ int main() {
 	FragmentShader<char> shader;
 
 	Pipeline<char> p = Pipeline<char>();
-	p.set_camera(-1, 1, -1, 1, 1, 2);
-	p.set_target(screen, 150, 50);
-	p.set_shader(shader);
+	p.setCamera(-1, 1, -1, 1, 1, 2);
+	p.setTarget(screen, 150, 50);
+	p.setShader(shader);
 	p.render(triangles);
 
 	show(screen, SCREEN_WIDTH, SCREEN_HEIGHT);

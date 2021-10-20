@@ -7,7 +7,7 @@
 #include "Triangle.h"
 
 template<typename target_t>
-void Pipeline<target_t>::set_camera(double top, double bottom, double left, double right, double near, double far) {
+void Pipeline<target_t>::setCamera(double top, double bottom, double left, double right, double near, double far) {
 	top_ = top;
 	bottom_ = bottom;
 	left_ = left;
@@ -17,14 +17,14 @@ void Pipeline<target_t>::set_camera(double top, double bottom, double left, doub
 }
 
 template<typename target_t>
-void Pipeline<target_t>::set_target(target_t *target, size_t width, size_t height) {
+void Pipeline<target_t>::setTarget(target_t *target, size_t width, size_t height) {
 	screen_ = target;
 	screen_width_ = width;
 	screen_height_ = height;
 }
 
 template<typename target_t>
-void Pipeline<target_t>::set_shader(FragmentShader<target_t> &shader) {
+void Pipeline<target_t>::setShader(FragmentShader<target_t> &shader) {
 	shader_ = shader;
 }
 
