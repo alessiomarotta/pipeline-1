@@ -12,7 +12,7 @@ public:
 
 	void set_target(target_t *target, size_t width, size_t height);
 
-	void set_shader(FragmentShader<target_t> shader);
+	void set_shader(FragmentShader<target_t> &shader);
 
 	void project();
 
@@ -22,7 +22,7 @@ public:
 
 	void applyShader();
 
-	void render(std::vector<Triangle> triangles);
+	void render(std::vector<Triangle> &triangles);
 
 private:
 	std::vector<Triangle> triangles_;

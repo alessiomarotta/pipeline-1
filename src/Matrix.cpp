@@ -10,7 +10,7 @@ Matrix::Matrix(size_t rows, size_t cols) {
 	m_.resize(rows, std::vector<double>(cols, 0.0));
 }
 
-Matrix::Matrix(size_t rows, size_t cols, std::vector<double> m) : Matrix(rows, cols) {
+Matrix::Matrix(size_t rows, size_t cols, std::vector<double> &m) : Matrix(rows, cols) {
 	for (size_t i = 0; i < rows; i++) {
 		for (size_t j = 0; j < cols; j++) {
 			m_[i][j] = m[(i * cols) + j];
@@ -22,7 +22,7 @@ double& Matrix::operator()(size_t row, size_t col) {
    return m_[row][col];
 }
 
-Matrix Matrix::operator*(Matrix n) {
+Matrix Matrix::operator*(Matrix &n) {
 	Matrix res = Matrix(rows_, cols_);
 
 	for (size_t i = 0; i < rows_; i++) {
@@ -57,7 +57,7 @@ Vertex Matrix::operator*(Vertex v) {
 	return Vertex(x, y, z, w);
 }
 
-Matrix Matrix::operator+(Matrix n) {
+Matrix Matrix::operator+(Matrix &n) {
 	Matrix res = Matrix(rows_, cols_);
 
 	for (size_t i = 0; i < rows_; i++) {
@@ -69,7 +69,7 @@ Matrix Matrix::operator+(Matrix n) {
 	return res;
 }
 
-Matrix Matrix::operator-(Matrix n) {
+Matrix Matrix::operator-(Matrix &n) {
 	Matrix res = Matrix(rows_, cols_);
 
 	for (size_t i = 0; i < rows_; i++) {

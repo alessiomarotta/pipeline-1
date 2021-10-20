@@ -24,7 +24,7 @@ void Pipeline<target_t>::set_target(target_t *target, size_t width, size_t heigh
 }
 
 template<typename target_t>
-void Pipeline<target_t>::set_shader(FragmentShader<target_t> shader) {
+void Pipeline<target_t>::set_shader(FragmentShader<target_t> &shader) {
 	shader_ = shader;
 }
 
@@ -127,7 +127,7 @@ void Pipeline<target_t>::applyShader() {
 }
 
 template<typename target_t>
-void Pipeline<target_t>::render(std::vector<Triangle> triangles) {
+void Pipeline<target_t>::render(std::vector<Triangle> &triangles) {
 	triangles_ = triangles;
 
 	project();
