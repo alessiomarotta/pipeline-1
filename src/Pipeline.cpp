@@ -103,12 +103,11 @@ double calculateFragmentZ(Triangle t, double x, double y) {
 // TODO: add zbuffering
 template<typename target_t>
 void Pipeline<target_t>::rasterize() {
-	// TODO: drop fragments outside of the view
 	for (Triangle &t : triangles_) {
-		double min_x = toPixel(std::min({t.a.x, t.b.x, t.c.x}), screen_width_);
-		double min_y = toPixel(std::min({t.a.y, t.b.y, t.c.y}), screen_height_);
-		double max_x = toPixel(std::max({t.a.x, t.b.x, t.c.x}), screen_width_);
-		double max_y = toPixel(std::max({t.a.y, t.b.y, t.c.y}), screen_height_);
+		double min_x = toPixel(std::min({t.a.x, t.b.x, t.c.x, 1.0}), screen_width_);
+		double min_y = toPixel(std::min({t.a.y, t.b.y, t.c.y, 1.0}), screen_height_);
+		double max_x = toPixel(std::max({t.a.x, t.b.x, t.c.x, 0.0}), screen_width_);
+		double max_y = toPixel(std::max({t.a.y, t.b.y, t.c.y, 0.0}), screen_height_);
 
 		for (size_t x = min_x; x <= max_x; x++) {
 			for (size_t y = min_y; y <= max_y; y++) {
