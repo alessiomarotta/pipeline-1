@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include "Fragment.h"
+#include "FragmentShader.h"
 #include "Matrix.h"
 #include "Pipeline.h"
 #include "Triangle.h"
@@ -21,6 +22,11 @@ void Pipeline<target_t>::set_target(target_t *target, size_t width, size_t heigh
 	screen_ = target;
 	screen_width_ = width;
 	screen_height_ = height;
+}
+
+template<typename target_t>
+void Pipeline<target_t>::set_shader(FragmentShader<target_t> shader) {
+	shader_ = shader;
 }
 
 template<typename target_t>
@@ -128,12 +134,10 @@ std::vector<Fragment> Pipeline<target_t>::rasterize() {
 	return fragments;
 }
 
-// TODO: make it use FragmentShader instead of the hardcoded shader
 template<typename target_t>
 void Pipeline<target_t>::applyShader() {
 	for (Fragment f : fragments_) {
-		int digit = int((f.z + 1.0) * 10 / 2);
-		screen_[f.y * screen_width_ + f.x] = char(digit + '0');
+		screen_[f.y * screen_width_ + f.x] = shader_.apply(f);
 	}
 }
 
