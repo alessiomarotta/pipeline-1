@@ -24,9 +24,6 @@ class Pipeline {
 
 		void render(std::vector<Triangle> triangles);
 
-		// not really part of the class, to be used only for debug
-		void show();
-
 	private:
 		std::vector<Triangle> triangles_;
 		std::vector<Fragment> fragments_;

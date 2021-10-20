@@ -8,6 +8,27 @@
 #include "Pipeline.h"
 #include "Pipeline.cpp"
 
+#define SCREEN_WIDTH 150
+#define SCREEN_HEIGHT 50
+
+void initializeScreen(char *screen, size_t width, size_t height) {
+	for (size_t x = 0; x < width; x++) {
+		for (size_t y = 0; y < height; y++)
+			screen[y * width + x] = '.';
+	}
+}
+
+void show(char *screen, size_t width, size_t height) {
+	for (size_t y = 0; y < height; y++) {
+		std::cout << std::endl;
+
+		for (size_t x = 0; x < width; x++)
+			std::cout << screen[y * width + x];
+	}
+
+	std::cout << std::endl;
+}
+
 int main() {
 	Vertex v1 = Vertex(1.0, -1.0, 1.5);
 	Vertex v2 = Vertex(1.0, 1.0, 1.1);
@@ -18,14 +39,16 @@ int main() {
 	Triangle t2 = Triangle(v1, v3, v4);
 	FragmentShader<char> shader;
 
-	char screen[150 * 50];
+	char screen[SCREEN_WIDTH * SCREEN_HEIGHT];
+	initializeScreen(screen, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	Pipeline<char> p = Pipeline<char>();
 	p.set_camera(-1, 1, -1, 1, 1, 2);
 	p.set_target(screen, 150, 50);
 	p.set_shader(shader);
 	p.render({t1, t2});
-	p.show();
+
+	show(screen, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	return 0;
 }

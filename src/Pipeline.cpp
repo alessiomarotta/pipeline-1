@@ -149,22 +149,5 @@ void Pipeline<target_t>::render(std::vector<Triangle> triangles) {
 	triangles_ = removeTriangles();
 	fragments_ = rasterize();
 
-	for (size_t x = 0; x < 150; x++) {
-		for (size_t y = 0; y < 50; y++)
-			screen_[y * screen_width_ + x] = '.';
-	}
-
 	applyShader();
-}
-
-template<typename target_t>
-void Pipeline<target_t>::show() {
-	for (size_t y = 0; y < 50; y++) {
-		std::cout << std::endl;
-
-		for (size_t x = 0; x < 150; x++)
-			std::cout << screen_[y * screen_width_ + x];
-	}
-
-	std::cout << std::endl;
 }
