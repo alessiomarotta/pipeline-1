@@ -14,11 +14,11 @@ class Pipeline {
 
 		void set_shader(FragmentShader<target_t> shader);
 
-		std::vector<Triangle> project();
+		void project();
 
-		std::vector<Triangle> removeTriangles();
+		void removeTriangles();
 
-		std::vector<Fragment> rasterize();
+		void rasterize();
 
 		void applyShader();
 

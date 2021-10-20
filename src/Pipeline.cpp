@@ -1,5 +1,4 @@
 #include <algorithm>
-#include <iostream>
 #include <vector>
 #include "Fragment.h"
 #include "FragmentShader.h"
@@ -30,9 +29,7 @@ void Pipeline<target_t>::set_shader(FragmentShader<target_t> shader) {
 }
 
 template<typename target_t>
-std::vector<Triangle> Pipeline<target_t>::project() {
-	std::vector<Triangle> res;
-
+void Pipeline<target_t>::project() {
 	Matrix proj = Matrix();
 
 	proj(0, 0) = 2.0*near_ / (right_-left_);
@@ -43,40 +40,34 @@ std::vector<Triangle> Pipeline<target_t>::project() {
 	proj(2, 3) = 2.0*near_*far_ / (near_-far_);
 	proj(3, 2) = 1.0;
 
-	for (Triangle t : triangles_) {
+	for (Triangle &t : triangles_) {
 		Vertex a = proj * t.a;
 		Vertex b = proj * t.b;
 		Vertex c = proj * t.c;
 
-		a = a / a.w;
-		b = b / b.w;
-		c = c / c.w;
-
-		res.push_back(Triangle(a, b, c));
+		t.a = a / a.w;
+		t.b = b / b.w;
+		t.c = c / c.w;
 	}
+}
+
+bool outOfBounds(Triangle t) {
+	bool res = t.a.x > 1.0 && t.b.x > 1.0 && t.c.x > 1.0;
+	res |= t.a.y > 1.0 && t.b.y > 1.0 && t.c.y > 1.0;
+	res |= t.a.z > 1.0 && t.b.z > 1.0 && t.c.z > 1.0;
+	res |= t.a.x < -1.0 && t.b.x < -1.0 && t.c.x < -1.0;
+	res |= t.a.y < -1.0 && t.b.y < -1.0 && t.c.y < -1.0;
+	res |= t.a.z < -1.0 && t.b.z < -1.0 && t.c.z < -1.0;
 
 	return res;
 }
 
 template<typename target_t>
-std::vector<Triangle> Pipeline<target_t>::removeTriangles() {
-	std::vector<Triangle> res;
-
-	for (Triangle t : triangles_) {
-		bool outOfBounds = t.a.x > 1.0 && t.b.x > 1.0 && t.c.x > 1.0;
-		outOfBounds |= t.a.y > 1.0 && t.b.y > 1.0 && t.c.y > 1.0;
-		outOfBounds |= t.a.z > 1.0 && t.b.z > 1.0 && t.c.z > 1.0;
-		outOfBounds |= t.a.x < -1.0 && t.b.x < -1.0 && t.c.x < -1.0;
-		outOfBounds |= t.a.y < -1.0 && t.b.y < -1.0 && t.c.y < -1.0;
-		outOfBounds |= t.a.z < -1.0 && t.b.z < -1.0 && t.c.z < -1.0;
-
-		if (outOfBounds)
-			continue;
-
-		res.push_back(t);
-	}
-
-	return res;
+void Pipeline<target_t>::removeTriangles() {
+	triangles_.erase(
+		std::remove_if(triangles_.begin(), triangles_.end(),
+			[](auto &t) {return outOfBounds(t);} ),
+		triangles_.end());
 }
 
 bool edgeFunction(Vertex v1, Vertex v2, double x, double y) {
@@ -99,7 +90,7 @@ double toCartesian(size_t coord, size_t factor) {
 	return (coord*2.0) / (factor-1) - 1;
 }
 
-double  calculateFragmentZ(Triangle t, double x, double y) {
+double calculateFragmentZ(Triangle t, double x, double y) {
 	double x_p = (t.b.y-t.a.y) * (t.c.z-t.a.z) - (t.c.y-t.a.y) * (t.b.z-t.a.z);
 	double y_p = (t.c.x-t.a.x) * (t.b.z-t.a.z) - (t.b.x-t.a.x) * (t.c.z-t.a.z);
 	double z_p = (t.b.x-t.a.x) * (t.c.y-t.a.y) - (t.b.y-t.a.y) * (t.c.x-t.a.x);
@@ -111,11 +102,9 @@ double  calculateFragmentZ(Triangle t, double x, double y) {
 
 // TODO: add zbuffering
 template<typename target_t>
-std::vector<Fragment> Pipeline<target_t>::rasterize() {
-	std::vector<Fragment> fragments;
-
+void Pipeline<target_t>::rasterize() {
 	// TODO: drop fragments outside of the view
-	for (Triangle t : triangles_) {
+	for (Triangle &t : triangles_) {
 		double min_x = toPixel(std::min({t.a.x, t.b.x, t.c.x}), screen_width_);
 		double min_y = toPixel(std::min({t.a.y, t.b.y, t.c.y}), screen_height_);
 		double max_x = toPixel(std::max({t.a.x, t.b.x, t.c.x}), screen_width_);
@@ -125,29 +114,25 @@ std::vector<Fragment> Pipeline<target_t>::rasterize() {
 			for (size_t y = min_y; y <= max_y; y++) {
 				if (insideTriangle(t, toCartesian(x, screen_width_), toCartesian(y, screen_height_))) {
 					double z = calculateFragmentZ(t, toCartesian(x, screen_width_), toCartesian(y, screen_height_));
-					fragments.push_back(Fragment(x, y, z));
+					fragments_.push_back(Fragment(x, y, z));
 				}
 			}
 		}
 	}
-
-	return fragments;
 }
 
 template<typename target_t>
 void Pipeline<target_t>::applyShader() {
-	for (Fragment f : fragments_) {
+	for (Fragment f : fragments_)
 		screen_[f.y * screen_width_ + f.x] = shader_.apply(f);
-	}
 }
 
 template<typename target_t>
 void Pipeline<target_t>::render(std::vector<Triangle> triangles) {
 	triangles_ = triangles;
 
-	triangles_ = project();
-	triangles_ = removeTriangles();
-	fragments_ = rasterize();
-
+	project();
+	removeTriangles();
+	rasterize();
 	applyShader();
 }
