@@ -45,7 +45,7 @@ int main() {
 
 	Pipeline<char> p;
 	p.setCamera(-1, 1, -1, 1, 1, 2);
-	p.setTarget(screen, 150, 50);
+	p.setTarget(screen, SCREEN_WIDTH, SCREEN_HEIGHT);
 	p.setShader(shader);
 	p.render(triangles);
 
