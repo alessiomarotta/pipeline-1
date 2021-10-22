@@ -104,6 +104,22 @@ double calculateFragmentZ(Triangle t, double x, double y) {
 	return (-p.x * x - p.y * y - p.w) / p.z;
 }
 
+void zBuffer(std::vector<Fragment>& fragments_) {
+	for (size_t i = 0; i < fragments_.size() - 1; i++) {
+		while (i < fragments_.size() - 1 && fragments_[i].x == fragments_[i + 1].x && fragments_[i].y == fragments_[i + 1].y) {
+			if (fragments_[i].z > fragments_[i + 1].z)
+				fragments_.erase(fragments_.begin() + i);
+			else
+				fragments_.erase(fragments_.begin() + i + 1);
+		}
+	}
+}
+
+//Fixare se vogliamo
+bool fragmentCompare(Fragment f1, Fragment f2) {
+	return (f1.y * 10 + f1.x) < (f2.y * 10 + f2.x);
+}
+
 // TODO: add zbuffering
 template<typename target_t>
 void Pipeline<target_t>::rasterize() {
@@ -129,6 +145,11 @@ void Pipeline<target_t>::rasterize() {
 			}
 		}
 	}
+
+	//o spostare il sort dento a zBuffer?
+	std::sort(fragments_.begin(), fragments_.end(), fragmentCompare);
+
+	zBuffer(fragments_);
 }
 
 template<typename target_t>
