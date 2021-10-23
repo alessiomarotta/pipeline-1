@@ -96,12 +96,11 @@ double toCartesian(size_t coord, size_t factor) {
 double calculateFragmentZ(Triangle t, double x, double y) {
 	// calculate the plane passing through t
 	double x_p = (t.b.y-t.a.y) * (t.c.z-t.a.z) - (t.c.y-t.a.y) * (t.b.z-t.a.z);
-	double y_p = (t.c.x-t.a.x) * (t.b.z-t.a.z) - (t.b.x-t.a.x) * (t.c.z-t.a.z);
-	double z_p = (t.b.x-t.a.x) * (t.c.y-t.a.y) - (t.b.y-t.a.y) * (t.c.x-t.a.x);
-	double w_p = (-x_p * (t.b.x-t.a.x) - y_p * (t.b.y-t.a.y) - z_p * (t.b.z-t.a.z));
+	double y_p = (t.b.z-t.a.z) * (t.c.x-t.a.x) - (t.c.z-t.a.z) * (t.b.x-t.a.x);
+	double z_p = (t.b.x-t.a.x) * (t.c.y-t.a.y) - (t.c.x-t.a.x) * (t.b.y-t.a.y);
+	double w_p = (-x_p*t.a.x - y_p*t.a.y - z_p*t.a.z);
 
-	Vertex p = Vertex(x_p, y_p, z_p, w_p);
-	return (-p.x * x - p.y * y - p.w) / p.z;
+	return (-x_p*x - y_p*y - w_p) / z_p;
 }
 
 void zBuffer(std::vector<Fragment>& fragments_) {
