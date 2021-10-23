@@ -103,23 +103,27 @@ double calculateFragmentZ(Triangle t, double x, double y) {
 	return (-x_p*x - y_p*y - w_p) / z_p;
 }
 
-void zBuffer(std::vector<Fragment>& fragments_) {
-	for (size_t i = 0; i < fragments_.size() - 1; i++) {
-		while (i < fragments_.size() - 1 && fragments_[i].x == fragments_[i + 1].x && fragments_[i].y == fragments_[i + 1].y) {
-			if (fragments_[i].z > fragments_[i + 1].z)
-				fragments_.erase(fragments_.begin() + i);
+bool fragmentCompare(const Fragment &a, const Fragment &b) {
+	return a.x == b.x ? a.y <= b.y : a.x <= b.x;
+}
+
+void zBuffering(std::vector<Fragment> &fragments) {
+	std::sort(fragments.begin(), fragments.end(), fragmentCompare);
+
+	if (fragments.size() == 0)
+		return;
+
+	for (size_t i = 0; i < fragments.size()-1; i++) {
+		while (i < fragments.size()-1 && fragments[i].x == fragments[i+1].x && fragments[i].y == fragments[i+1].y) {
+			if (fragments[i].z > fragments[i+1].z)
+				fragments.erase(fragments.begin() + i);
+
 			else
-				fragments_.erase(fragments_.begin() + i + 1);
+				fragments.erase(fragments.begin() + i + 1);
 		}
 	}
 }
 
-//Fixare se vogliamo
-bool fragmentCompare(Fragment f1, Fragment f2) {
-	return (f1.y * 10 + f1.x) < (f2.y * 10 + f2.x);
-}
-
-// TODO: add zbuffering
 template<typename target_t>
 void Pipeline<target_t>::rasterize() {
 	for (Triangle &t : triangles_) {
@@ -145,10 +149,7 @@ void Pipeline<target_t>::rasterize() {
 		}
 	}
 
-	//o spostare il sort dento a zBuffer?
-	std::sort(fragments_.begin(), fragments_.end(), fragmentCompare);
-
-	zBuffer(fragments_);
+	zBuffering(fragments_);
 }
 
 template<typename target_t>
