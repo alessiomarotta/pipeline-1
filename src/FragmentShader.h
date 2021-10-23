@@ -11,7 +11,8 @@ public:
 
 template<>
 char FragmentShader<char>::apply(Fragment &fragment) {
-	return '0' + fragment.z * 10;
+	unsigned int digit = int((fragment.z + 1.0) * 10 / 2);
+	return char(digit + '0');
 }
 
 #endif
