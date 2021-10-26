@@ -14,6 +14,9 @@ public:
 
 	void setShader(FragmentShader<target_t> &shader);
 
+	void render(std::vector<Triangle> &triangles);
+
+private:
 	void project();
 
 	void removeTriangles();
@@ -22,9 +25,6 @@ public:
 
 	void applyShader();
 
-	void render(std::vector<Triangle> &triangles);
-
-private:
 	std::vector<Triangle> triangles_;
 	std::vector<Fragment> fragments_;
 	double top_, bottom_, left_, right_, near_, far_;
