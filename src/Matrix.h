@@ -9,7 +9,7 @@ class Matrix {
 public:
 	Matrix() : Matrix(4, 4) {}
 
-	Matrix(std::vector<double> m) : Matrix(4, 4, m) {}
+	Matrix(std::vector<double> &m) : Matrix(4, 4, m) {}
 
 	Matrix(size_t rows, size_t cols);
 
