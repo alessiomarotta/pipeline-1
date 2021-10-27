@@ -38,10 +38,10 @@ int main() {
 	Triangle t1(v1, v2, v3);
 	Triangle t2(v1, v3, v4);
 	std::vector<Triangle> triangles = {t1, t2};
+	FragmentShader<char> shader;
 
 	char screen[SCREEN_WIDTH * SCREEN_HEIGHT];
 	initializeScreen(screen, SCREEN_WIDTH, SCREEN_HEIGHT);
-	FragmentShader<char> shader;
 
 	Pipeline<char> p;
 	p.setCamera(-1, 1, -1, 1, 1, 2);
